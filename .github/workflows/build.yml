@@ -35,5 +35,5 @@ jobs:
         with:
           name: AUMF-dylibs
           path: |
-            build/AUModFramework.dylib
-            build/ExampleMod.dylib
+            AUModFramework/build/AUModFramework.dylib
+            AUModFramework/build/ExampleMod.dylib
