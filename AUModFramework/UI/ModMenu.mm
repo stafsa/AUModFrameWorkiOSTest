@@ -134,7 +134,7 @@ static AUMFMenuController* g_menuVC = nil;
 
 + (void)install {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow* win = UIApplication.sharedApplication.keyWindow;
+        UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
         UIGestureRecognizer* tap =
             [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
         ((UITapGestureRecognizer*)tap).numberOfTouchesRequired = 4;
@@ -150,7 +150,7 @@ static AUMFMenuController* g_menuVC = nil;
 
 + (void)toggle {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UIWindow* win = UIApplication.sharedApplication.keyWindow;
+        UIWindow* win = [[[UIApplication sharedApplication] windows] firstObject];
         if (g_menuVC && g_menuVC.view.superview) {
             [g_menuVC dismiss]; return;
         }

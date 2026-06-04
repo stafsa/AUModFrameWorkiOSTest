@@ -1,4 +1,12 @@
 #pragma once
+
+enum class GameState : int32_t {
+    NotStarted = 0,
+    Lobby      = 1,
+    Started    = 3,
+    Ended      = 4
+};
+
 #include "../Core/IL2CPP.hpp"
 
 // ═══════════════════════════════════════════════════════════════
