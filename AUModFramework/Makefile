@@ -42,6 +42,8 @@ LDFLAGS := \
     -dynamiclib \
     -framework Foundation \
     -framework UIKit \
+    -framework CoreGraphics \
+    -framework QuartzCore \
     -lobjc \
     -L$(DOBBY_DIR) -ldobby \
     -Wl,-rpath,@loader_path
