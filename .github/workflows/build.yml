@@ -1,0 +1,46 @@
+name: Build AUModFramework
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Ninja
+        run: brew install ninja
+
+      - name: Clone & Build Dobby
+        run: |
+          git clone https://github.com/jmpews/Dobby
+          mkdir -p Dobby/cmake
+          curl -L "https://github.com/leetal/ios-cmake/raw/refs/tags/4.4.1/ios.toolchain.cmake" \
+               -o Dobby/cmake/ios.toolchain.cmake
+          sed -i '' \
+            's/get_filename_component(PLATFORM_SDK_DIR ${CMAKE_OSX_SYSROOT_INT} PATH)/get_filename_component(PLATFORM_SDK_DIR "${CMAKE_OSX_SYSROOT_INT}" DIRECTORY)/' \
+            Dobby/cmake/ios.toolchain.cmake
+          sed -i '' \
+            's/get_filename_component(CMAKE_DEVELOPER_ROOT ${PLATFORM_SDK_DIR} PATH)/get_filename_component(CMAKE_DEVELOPER_ROOT "${CMAKE_DEVELOPER_ROOT}" DIRECTORY)/' \
+            Dobby/cmake/ios.toolchain.cmake
+          cd Dobby && mkdir build && cd build
+          cmake .. -G Ninja \
+            -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake \
+            -DPLATFORM=OS64 \
+            -DDEPLOYMENT_TARGET=14.0 \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DdobbySharedLibrary=OFF
+          ninja
+
+      - name: Build AUModFramework
+        run: |
+          export DOBBY_DIR=$GITHUB_WORKSPACE/Dobby/build
+          make all
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: AUMF-dylibs
+          path: |
+            build/AUModFramework.dylib
+            build/ExampleMod.dylib
