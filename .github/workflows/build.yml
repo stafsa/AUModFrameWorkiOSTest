@@ -27,6 +27,7 @@ jobs:
       - name: Build AUModFramework
         run: |
           export DOBBY_DIR=$GITHUB_WORKSPACE/Dobby/build
+          cd $GITHUB_WORKSPACE
           make all
 
       - name: Upload artifacts
